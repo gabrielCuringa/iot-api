@@ -3,9 +3,9 @@ info:
   version: "0.0.1"
   title: IoT API - Benjamin Dekeyser & Gabriel Curinga
 # during dev, should point to your local machine
-host: localhost:10010
+host: localhost:8081
 # basePath prefixes all resource paths
-basePath: /
+basePath: /api
 #
 schemes:
   # tip: remove http to make production-grade
@@ -18,19 +18,22 @@ consumes:
 produces:
   - application/json
 paths:
-  /hello:
+  /generic/{entity}/{id}:
     # binds a127 app logic to a route
-    x-swagger-router-controller: hello_world
+    x-swagger-router-controller: entity
     get:
-      description: Returns 'Hello' to the caller
-      # used as the method name of the controller
-      operationId: hello
+      description: Returns an entity datas
       parameters:
-        - name: name
-          in: query
-          description: The name of the person to whom to say hello
-          required: false
+        - name: entity
           type: string
+          in: path
+          required: true
+        - name: id
+          type: string
+          in: path
+          required: true
+      # used as the method name of the controller
+      operationId: getEntityById
       responses:
         "200":
           description: Success
@@ -42,13 +45,43 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /temperature:
+  /generic/{entity}:
     # binds a127 app logic to a route
-    x-swagger-router-controller: temperature
+    x-swagger-router-controller: entity
     get:
-      description: Returns the temperatures values
+      description: Returns the entity datas
+      parameters:
+        - name: entity
+          type: string
+          in: path
+          required: true
       # used as the method name of the controller
-      operationId: getTemperature
+      operationId: getEntity
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BasicResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Insert entity
+      parameters:
+        - name: entity
+          type: string
+          in: path
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+      # used as the method name of the controller
+      operationId: insertEntity
       responses:
         "200":
           description: Success

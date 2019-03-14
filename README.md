@@ -1,1 +1,1 @@
-# Skeleton project for Swagger
+# API MQTT & HTTP pour le projet d'IoT

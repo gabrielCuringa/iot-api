@@ -45,6 +45,35 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    put:
+      description: Update an entity datas
+      parameters:
+        - name: entity
+          type: string
+          in: path
+          required: true
+        - name: id
+          type: string
+          in: path
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+      # used as the method name of the controller
+      operationId: updateEntityById
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/BasicResponse"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /generic/{entity}:
     # binds a127 app logic to a route
     x-swagger-router-controller: entity

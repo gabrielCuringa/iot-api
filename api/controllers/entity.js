@@ -7,7 +7,8 @@ var _ = require("lodash");
 module.exports = {
   insertEntity: insertEntity,
   getEntity: getEntity,
-  getEntityById: getEntityById
+  getEntityById: getEntityById,
+  updateEntityById: updateEntityById
 };
 
 /*
@@ -48,6 +49,7 @@ function getEntityById(req, res) {
 function insertEntity(req, res) {
   var entity = req.swagger.params.entity.value;
   var datas = req.body;
+  console.log(datas);
   var mergedDatas = _.merge(
     {
       _id: ObjectId()
@@ -58,6 +60,21 @@ function insertEntity(req, res) {
   mongodb.insert(entity, mergedDatas, (err, result) => {
     if (err) res.status(400).json(err);
     res.status(200).json(result.insertedId);
+    return;
+  });
+}
+
+function updateEntityById(req, res) {
+  var body = req.body;
+  console.log(req.swagger.params.id.value);
+  var datas = {
+    query: { _id: ObjectId(req.swagger.params.id.value) },
+    newvalues: { $addToSet: body }
+  };
+
+  mongodb.update(req.swagger.params.entity.value, datas, (err, result) => {
+    if (err) res.status(400).json(err);
+    res.status(200).json(result.upsertedId);
     return;
   });
 }

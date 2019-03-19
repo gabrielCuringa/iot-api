@@ -66,11 +66,8 @@ module.exports = {
       db.collection(collectionName).updateOne(
         datas.query,
         datas.newvalues,
-        (err, res) => {
-          if (err) throw err;
-          console.log("1 document updated");
-          callback(res);
-          db.close();
+        (error, result) => {
+          callback(error, result);
         }
       );
     });
